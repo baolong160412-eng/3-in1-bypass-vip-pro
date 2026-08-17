@@ -1,0 +1,51 @@
+[General]
+bypass-system = true
+skip-proxy = 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12, localhost, *.local
+dns-server = system, 1.1.1.1, 8.8.8.8
+
+[Rule]
+# --- YouTube ---
+DOMAIN-KEYWORD,youtube,PROXY
+DOMAIN-KEYWORD,googlevideo,PROXY
+DOMAIN-SUFFIX,ytimg.com,PROXY
+DOMAIN-SUFFIX,youtu.be,PROXY
+
+# --- Locket ---
+DOMAIN-KEYWORD,locket,PROXY
+DOMAIN-SUFFIX,locketcamera.com,PROXY
+
+# --- Meitu ---
+DOMAIN-KEYWORD,meitu,PROXY
+DOMAIN-SUFFIX,meitudata.com,PROXY
+DOMAIN-SUFFIX,meitustat.com,PROXY
+
+# --- Spotify ---
+DOMAIN-KEYWORD,spotify,PROXY
+DOMAIN-SUFFIX,scdn.co,PROXY
+DOMAIN-SUFFIX,spoti.fi,PROXY
+
+# Tất cả app/web khác đi mạng trực tiếp
+FINAL,DIRECT
+
+[URL Rewrite]
+# --- YouTube Ads Block ---
+^https?:\/\/[\w-]+\.googlevideo\.com\/videoplayback.*(&ctier=L) reject
+^https?:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/player\? reject
+
+# --- Spotify Ads Block ---
+^https?:\/\/.*audio-ak-spotify-com\.akamaized\.net reject
+^https?:\/\/.*heads-ak-spotify-com\.akamaized\.net reject
+
+[Script]
+# --- Locket Gold Unlock ---
+LocketGold = type=http-response,pattern=^https?:\/\/api\.revenuecat\.com\/v1\/(subscribers|receipts),script-path=https://raw.githubusercontent.com/ddgksf2013/Filter/master/Script/Locket.js,requires-body=true,timeout=10
+
+# --- Meitu VIP Unlock ---
+MeituVIP = type=http-response,pattern=^https?:\/\/.*meitu.*\/.*(vip|user|account),script-path=https://raw.githubusercontent.com/ddgksf2013/Filter/master/Script/Meitu.js,requires-body=true,timeout=10
+
+# --- Spotify Premium Script ---
+SpotifyLyric = type=http-response,pattern=^https?:\/\/spclient\.wg\.spotify\.com\/(bootstrap\/v1\/bootstrap|user-customization-service\/v1\/customize)$,requires-body=true,binary-mode-stream=true,script-path=https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-lyric.js,timeout=10
+
+[MitM]
+enable = true
+hostname = *.googlevideo.com, youtubei.googleapis.com, api.revenuecat.com, *.meitu.com, *.meitudata.com, spclient.wg.spotify.com
